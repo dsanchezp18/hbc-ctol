@@ -18,7 +18,7 @@ However, there are some things that need to be considered before doing so:
 
 - The execution of the `main_file.rnw` file will compile the complete document. However, to compile the child documents in standalone mode, the paths in this main file for the loading of databases must be changed to absolute paths. This means that, instead of `load('databases/lapop_ecu.Rdata')` you'll have to change it to `load(C:\Users\Daniel Sanchez\Documents\personal\hbc-ctolecu)`, changing the `C:\\...` to wherever you loaded the uncompressed package. If you do not do this, you'll get the following error: `Error in readChar(con, 5L, useBytes = TRUE): cannot open the connection`. You'll have to rinse and repeat for the other three `load()` commands to load the remaining dataframes. The same thing should be done to the `\addbibresource` command in the main file preamble if you want to generate standalone bibliographies. I'm currently working on a solution for this. 
 
-These are the only things you'll need to do, to my own knowledge, to easily compile the paper into your own computer. Please, please let me know if you run into any issues, I'll do my best trying to help you: dsanchezp998@gmail.com. I am also open to suggestions and 
+These are the only things you'll need to do, to my own knowledge, to easily compile the paper into your own computer. Please, please let me know if you run into any issues, I'll do my best trying to help you: dsanchezp998@gmail.com. I am also open to suggestions, criticisms, comments and anything else. 
 
 A spanish version of the document and another repository with the data wrangling will be made available soon. 
 
