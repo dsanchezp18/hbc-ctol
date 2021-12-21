@@ -1,0 +1,24 @@
+oil_yearly<-Quandl('FRED/DCOILWTICO',
+                  type = 'raw', 
+                  collapse = 'annual',
+                  start_date= '2003-01-01',
+                  end_date = '2019-12-31')
+
+# Make a year column
+
+oil_yearly$year<-as.numeric(format(oil_yearly$Date,'%Y'))
+
+# Wrangle the oil database
+
+oil_yearly<-select(oil_yearly, year, Value) # Select only year and price
+oil_yearly<-rename(oil_yearly, 'wti'= Value) # Change variable name 
+oil_yearly<-relocate(oil_yearly, year, .before = wti) # Move year to first column
+oil_yearly<-arrange(oil_yearly, desc(row_number())) # Invert row order
+
+# Calculate the percent changes
+
+oil_yearly$wti_g<-((oil_yearly$wti/lag(oil_yearly$wti))-1)*100
+
+# Now eliminate 2003 and select only the percent change
+oil_yearly<-oil_yearly[2:17,]
+oil_yearly<-select(oil_yearly, year, wti_g)

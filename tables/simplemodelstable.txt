@@ -1,0 +1,45 @@
+|                         |  Model 1  |  Model 2  |  Model 3  |  Model 4  |  Model 5  |
+|:------------------------|:---------:|:---------:|:---------:|:---------:|:---------:|
+|(Intercept)              | -1.894*** | -1.989*** | -0.455**  |   0.553   | -1.527*** |
+|                         |  (0.127)  |  (0.110)  |  (0.208)  |  (0.362)  |  (0.196)  |
+|year2016                 | 0.848***  | 1.001***  |  -0.188   | -1.251*** |   0.278   |
+|                         |  (0.158)  |  (0.132)  |  (0.238)  |  (0.415)  |  (0.234)  |
+|econ_sitWorse            |   0.131   |           |           |           |           |
+|                         |  (0.169)  |           |           |           |           |
+|year2016 × econ_sitWorse |  -0.025   |           |           |           |           |
+|                         |  (0.197)  |           |           |           |           |
+|unem2_4a                 |           | 1.015***  |           |           |           |
+|                         |           |  (0.205)  |           |           |           |
+|year2016 × unem2_4a      |           | -1.005*** |           |           |           |
+|                         |           |  (0.256)  |           |           |           |
+|pres_conf                |           |           | -0.288*** |           |           |
+|                         |           |           |  (0.037)  |           |           |
+|year2016 × pres_conf     |           |           | 0.206***  |           |           |
+|                         |           |           |  (0.044)  |           |           |
+|pres_aprov               |           |           |           | -0.648*** |           |
+|                         |           |           |           |  (0.096)  |           |
+|year2016 × pres_aprov    |           |           |           | 0.568***  |           |
+|                         |           |           |           |  (0.111)  |           |
+|polscore                 |           |           |           |           |  -0.047   |
+|                         |           |           |           |           |  (0.038)  |
+|year2016 × polscore      |           |           |           |           |  0.095**  |
+|                         |           |           |           |           |  (0.043)  |
+|AIC                      |  2893.64  |  2889.04  |  2848.57  |  2844.82  |  2574.81  |
+|BIC                      |  2918.38  |  2912.99  |  2873.81  |  2868.66  |  2598.26  |
+|Observations             |   2948    |   2950    |   2944    |   2941    |   2535    |
+
+__Note:__
+^^ * p < 0.1, ** p < 0.05, *** p < 0.01
+
+
+coefficient_names<-c('year2016 = Year dummy',
+                     'econ_sitWorse = Worse economic situation',
+                     'unem2_4a = Unemployment',
+                     'pres_conf = Confidence in President',
+                     'pres_aprov = Approval of President\'s Job Performance',
+                     'polscore = Political Wing Identification',
+                     'year2016:econ_sitWorse = Economic Situation \03b4',
+                     'year2016:unem2_4a = Unemployment Situation \03b4',
+                     'year2016:pres_conf = Pres. Confidence \03b4',
+                     'year2016:pres_aprov = Pres. Approval \03b4',
+                     '(Intercept) = Constant'

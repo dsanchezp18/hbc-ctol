@@ -1,0 +1,328 @@
+% Findings .Rnw File
+<<parent_tofind, include = F>>=
+set_parent('C:/Users/Daniel Sanchez/OneDrive/Documentos/u/tesis/paper/main_file.Rnw') # Set the parent document preamble
+@
+% Load libraries
+<<libraries, include = F>>=
+library(Quandl) # To extract financial data from several sources
+library(WDI) # World Bank database
+library(patchwork) # Combine plots into one sole output
+@
+% Load data
+<<data_findings, include = F>>=
+# Load the WTI dataframe
+
+load('C:/Users/Daniel Sanchez/OneDrive/Documentos/u/tesis/paper/tables/oil.RData')
+
+# GDP growth rate
+gdp_wdi<-WDI(country = 'EC',
+             indicator = 'NY.GDP.MKTP.KD.ZG')
+
+# Wrangle the GDP
+gdp_wdi<-select(gdp_wdi, NY.GDP.MKTP.KD.ZG, year)
+gdp_wdi<-rename(gdp_wdi, 'growth' = NY.GDP.MKTP.KD.ZG)
+gdp_wdi<-relocate(gdp_wdi, year, .before = growth)
+gdp_wdi<-gdp_wdi[2:17,] 
+
+# Reorder the columns
+
+gdp_wdi<-arrange(gdp_wdi, desc(row_number()))
+
+# Join the two series for ggplot graphing
+
+# Add the legend for the gdp_wdi
+gdp_wdi$legend<-'Real GDP Growth Rate'
+
+# Then merge
+
+econ_graph_df<-bind_rows(oil, gdp_wdi)
+
+# Tabulate economic situation and the unemployment
+ecsit_time<-svyby(~ econ_sit, 
+                   ~ year, 
+                   design = lapop_des, 
+                   svymean, 
+                   na.rm = T)
+
+ecsit_time<-rename(ecsit_time, 'perc' = econ_sitWorse, 'se' = se.econ_sitWorse)
+ecsit_time<-select(ecsit_time, year, perc, se)
+ecsit_time$perc<-ecsit_time$perc*100 %>% as.numeric()
+ecsit_time$legend<-'Worse Economic Situation'
+
+# Unemployment rate (both types)
+
+unem_time<-svyby(~ unem2_4a,
+                 ~ year, 
+                 design = lapop_des, 
+                 svymean, 
+                 na.rm = T)
+
+unem_time<-rename(unem_time, 'perc' = unem2_4a)
+unem_time<-select(unem_time, year, perc, se)
+unem_time$perc<-unem_time$perc*100 %>% as.numeric()
+unem_time$legend<-'Unemployed'
+
+# Now join both bases
+
+lp_ecg_df<-bind_rows(ecsit_time, unem_time)
+rownames(lp_ecg_df)<-c()
+
+lp_ecg_df<-lp_ecg_df[-c(9,10),]
+
+@
+
+\section{FINDINGS}
+
+\subsection{Conditions surrounding the jump in corruption tolerance}
+
+\begin{figure}[htbp]
+\centering
+\fbox{
+\begin{minipage}{\textwidth}
+\caption{Ecuadorian economic conditions 2004-2019}
+\label{fig:ecua_ec}
+<<econ_graph, fig.align='center', include = T, echo = F, fig.width = 10, fig.alt= 20>>=
+econ_graph<-ggplot(econ_graph_df,
+                   aes(x = year, y = growth, color = legend, group = legend))+
+                   geom_line(size = 0.8)+
+                   scale_colour_brewer(palette = 'Set2')+
+                   geom_point(size = 2.15)+
+                   scale_y_continuous(breaks = c(seq(-50,90,20)))+
+                   scale_x_continuous(breaks = c(2004,2006,2008,2010,2012,2014,2016,2018))+
+                   theme_bw()+
+                   theme(panel.grid.major = element_blank(),
+                         panel.grid.minor = element_blank(),
+                         text = element_text(size = 12),
+                         legend.position = c(0.13,0.20),
+                         legend.background = element_blank())+
+                   labs(x = '',
+                        y = 'Percent change from the last period (%)',
+                        color = '',
+                        title = 'Real GDP growth and yearly percent change in WTI oil price per barrel')
+
+ecsit_graph<-ggplot(lp_ecg_df,
+                    aes(x = as.factor(year), 
+                        y = perc, 
+                        color = legend, 
+                        group = legend))+
+             geom_line(aes(x = year,
+                           y= perc),
+                       size = 0.8)+
+             geom_line(aes(x = year, 
+                           y = perc - 1.96*100*se),
+                           size = 0.7,
+                           color = 'grey50', 
+                           linetype = 'dotted')+
+             geom_line(aes(x = year, 
+                           y = perc + 1.96*100*se),
+                           size = 0.7,
+                           color = 'grey50', 
+                           linetype = 'dotted')+
+             scale_colour_brewer(palette = 'Set1')+
+             geom_point(size = 2.15)+
+             theme_bw()+
+             theme(panel.grid.major = element_blank(),
+                   panel.grid.minor = element_blank(),
+                   text = element_text(size = 12),
+                   legend.position = c(0.14,0.2),
+                   legend.background = element_blank())+
+             labs(x = '',
+                  y = 'Percent of voting-age Ecuadorians',
+                  color = '',
+                  title = 'Percent who are unemployed and who report a worse economic situation')
+
+econ_graph + ecsit_graph +
+  plot_layout(nrow = 2,
+              heights = c(8,8))
+
+@
+\textit{Note}: Real GDP growth rate data extracted from the World Bank's World Development Indicators. WTI oil barrel prices extracted from FRED and involve the percent change between end of year prices. All other data are estimates computed with the AB databases, which include 95\% confidence intervals considering design effects. Percentage of unemployment correspond to both open and \textit{hidden} unemployment (see Appendix \ref{app:first}). Figure prepared by the author. 
+\end{minipage}}
+\end{figure}
+
+As pointed out previously, the spike in corruption tolerance in Ecuador happened at the same time as other key events in the sociopolitical and economic landscapes of the country. First, a recession hit Ecuador beginning 2015 due to a commodity price collapse. Constrained fiscal revenues due to reduced oil prices limited the possibility of expansionary fiscal policy, and a dollarized economy frustrated any monetary efforts to offset the crisis. Figure \ref{fig:ecua_ec} displays economic conditions, both observed and perceived, of the country from 2004-2019. 
+
+% Wrangle the political opinion data to make a graph on it
+<<political_graph_data, include = F>>=
+
+# Rename columns to bind rows later
+
+pconf_g<-pconf_time
+
+pconf_g<-rename(pconf_g, 'perc' = pres_conf_dic)
+
+pconf_g$var<-'% who confide in the President'
+
+pconf_g<-pconf_g[3:8,]
+
+japrov_g<-japrov_time
+
+japrov_g<-rename(japrov_g, 'perc' = pres_aprov_dic)
+
+japrov_g$var<-'% who approve the President\'s job performance'
+
+# The same but with the percentage of leftists and rightists
+
+leftist_time<-svyby(~ leftist, 
+                    ~ year, 
+                    design = lapop_des,
+                    svymean, 
+                    na.rm = T)
+
+rightist_time<-svyby(~ rightist, 
+                     ~ year, 
+                     design = lapop_des,
+                     svymean, 
+                     na.rm = T)
+
+leftist_time<-rename(leftist_time, 'perc' = leftist)
+rightist_time<-rename(rightist_time, 'perc' = rightist)
+
+leftist_time$var<-'% who identify with the political left'
+rightist_time$var<-'% who identify with the political right'
+
+# Bind the rows
+
+political_df<-bind_rows(pconf_g, japrov_g)
+political_df<-bind_rows(political_df, leftist_time)
+political_df<-bind_rows(political_df, rightist_time)
+rownames(political_df)<-c()
+
+@
+
+\begin{figure}[hbtp]
+\centering
+\fbox{
+\begin{minipage}{\textwidth}
+\caption{Ecuadorian political culture indicators, 2004-2019}
+\label{fig:ecua_pol}
+<<political_graph, fig.align='center', include = T, echo = F, fig.width = 10, fig.alt= 20 >>=
+pol_graph<-ggplot(political_df,
+                  aes(x = year, y = perc, color = var, group = var))+
+                  geom_line(size = 0.8)+
+                  scale_color_manual(values = c('#FF4500', '#800080', '#800000', '#6495ED'))+
+                  geom_point(size = 2.15)+
+                  geom_line(aes(x = year, 
+                                y = perc - 1.96*se),
+                            size = 0.7,
+                            color = 'grey50', 
+                            linetype = 'dotted')+
+                  geom_line(aes(x = year, 
+                                y = perc + 1.96*se),
+                            size = 0.7,
+                            color = 'grey50', 
+                            linetype = 'dotted')+
+                  annotate('rect', xmin = 2.5, xmax = 7.5, ymin = 0, ymax = 0.75,
+                           alpha = 0.1, fill = 'green')+
+                  annotate('label', x = 5, y = 0.4, label = 'Correa Tenure')+
+                  annotate('rect', xmin = 0.5, xmax = 2.5, ymin = 0, ymax = 0.75,
+                           alpha = 0.1, fill = 'red')+
+                  annotate('label', x = 1.5, y = 0.5, label = 'Gutiérrez-Palacio Tenure')+
+                  annotate('rect', xmin = 7.5, xmax = 9, ymin = 0, ymax = 0.75,
+                           alpha = 0.1, fill = 'blue')+
+                  annotate('label', x = 8.3, y = 0.5, label = 'Moreno Tenure')+
+                  scale_y_continuous(breaks = c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9),
+                                     labels = c(10, 20, 30, 40, 50, 60, 70, 80, 90))+
+                  theme_bw()+
+                  theme(panel.grid.major = element_blank(),
+                        panel.grid.minor = element_blank(),
+                        text = element_text(size = 12),,
+                        axis.ticks.y = element_blank(), 
+                        legend.position = c(0.22,0.88),
+                        legend.background = element_blank())+
+                   labs(x = '',
+                        y = 'Percent (%) of Ecuadorian voting-age population',
+                        color = '')
+pol_graph
+@
+
+\textit{Note}: Percentages estimated from the AB Data, along with 95\% confidence intervals considering design effects. See Appendix \ref{app:first} for details on the construction of percentages. Figure prepared by the author. 
+
+\end{minipage}
+}
+\end{figure}
+
+Figure \ref{fig:ecua_ec} shows that in 2008 the commodity price collapse was greater than the one in 2014. However, \textbf{El Comercio Crisis} holds that in 2008 there was no reduction in economic activity due to oil price shocks, as the country had greater possibilities of international financing and also savings left over from past oil funds which were used to keep expansionary fiscal policy underway. Combined with exports competitiveness due to US dollar appreciations, the Ecuadorian fell into a \enquote{three-pincer trap} \textbf{Cordes analisis, p.1} which threatened to stagnate growth unless significant reform were to happen. President Correa himself admitted the sluggish performance of the economy not far from the 2017 presidential elections \textbf{cite el País.} It is likely that the economic circumstances, combined with accusations of corruption and attacks to the freedoms of press \textbf{Amazon Post}, \textbf{El Universo}, along with harsh repression of environmentalist and indigenous-backed protest \textbf{WPR} could have led to \enquote{popular backlash against his style of controntational politics} (Shifter, in Miroff, 2014). Figure \ref{fig:ecua_pol} shows several indicators of political culture in the country from 2004 to 2019. The AB data shows that indeed the President reached an all-time high popularity in 2014 and then a severe drop in 2016. Another notable in change in the political landscape in this period is the way that voting-age population identified politically. There was a notable increase of the people who identified in the \enquote{right} spectrum of the political compass, while those who identified did not see significant changes. 
+
+\subsection{Key regressors for the corruption tolerance jump}
+
+From the previous section, several variables that may have something to do with the corruption tolerance jump have come up. These variables have changed significantly during the 2014-2016 period and somewhat follow lines of reasoning in the literature. Two economic variables at the individual level significantly changed during the period: the percent of people who report a worse economic situation relative to a twelve month period as well as the unemployment rate. These follow macroeconomic indicators for the Ecuadorian economy too. Variables which proxy attitudes in the political landscape also have significantly changed: the percent who confide in the President, the percent who approve the President's job and also the percent of people who identify with the political right wing.
+
+Simple empirical models are estimated to study the relationship of these key changes in the probability of answering \enquote{Yes} in the corruption tolerance question of the AB, which follow the following equation.
+\begin{equation}
+\label{eqn:simplemod}
+P(ctol = 1 | \textbf{\textit{X}} \hspace{0.04cm}) = G \left[ \beta_0 + \delta_0 y_{16} + \beta_1 x^* + \delta_1 (y_{16} \cdot x^*) + u\right]
+\end{equation}
+
+where $x^*$ is
+
+\begin{itemize}
+
+\item A dummy variable equal to unity for respondents who answered that their economic situation is worse relative to the one twelve months ago and zero otherwise.
+
+\item A dummy variable equal to unity for respondents who report being unemployed in an either open or hidden manner (see Appendix \ref{app:first}) and zero otherwise.
+
+\item A discrete variable with numbers 1-7, where higher numbers imply a higher degree of confidence in the President.
+
+\item A discrete variable with numbers 1-5, with higher numbers implying a higher rating of the President's job performance.
+
+\item A discrete variable with numbers from 1-10 where 1 is the extreme left and 10 is the extreme right. 
+
+\end{itemize}
+
+% Estimate the models to present in the paper
+
+<<models_simple, include = F, warning = F>>=
+# Economic Situation
+log_ecsit<-svyglm(ctol ~ year*econ_sit,
+                  design = lapop_des46,
+                  family = quasibinomial(link = 'logit'))
+
+# Unemployment
+log_unem<-svyglm(ctol ~ year*unem2_4a,
+                 design = lapop_des46,
+                 family = quasibinomial(link = 'logit'))
+
+# Confidence in the President
+
+log_pconf<-svyglm(ctol ~ year*pres_conf,
+                  design = lapop_des46,
+                  family = quasibinomial(link = 'logit'))R
+
+# President's Job Approval
+
+log_aprov<-svyglm(ctol ~ year*pres_aprov,
+                  design = lapop_des46,
+                  family = quasibinomial(link = 'logit'))
+
+# Political wings
+
+log_polscore<-svyglm(ctol ~ year*polscore,
+                     design = lapop_des46,
+                     family = quasibinomial(link = 'logit'))
+
+# Put all of them in a list
+
+simple_models<-list(log_ecsit, log_unem, log_pconf, log_aprov, log_polscore)
+
+@
+
+<<simple_coefficients_table, include = T, warning=FALSE, results = 'asis', echo = F>>=
+
+# First create the observation numbers dataframe
+
+extra_obs_simplemod<-data.frame('Observations',
+                     length(fitted(log_ecsit)),
+                     length(fitted(log_unem)),
+                     length(fitted(log_pconf)),
+                     length(fitted(log_aprov)),
+                     length(fitted(log_polscore)))
+
+colnames(extra_obs_simplemod)<-c('Name', '1', '2', '3', '4', '5')
+
+# Now make the actual table
+
+modelsummary(simple_models,
+             stars = T,
+             output = 'latex',
+             add_rows = extra_obs_simplemod)
