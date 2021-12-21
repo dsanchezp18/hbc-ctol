@@ -1,0 +1,177 @@
+% Appendix 3: Complex Models with Alternative Link Functions Rnw File
+<<parent_ap3, include = F>>=
+set_parent('../../main_file.Rnw') # Set the parent document preamble
+@
+\section{APPENDIX C: OTHER EMPIRICAL MODELS FOR TABLE \ref{tab:complexmod}}
+\label{app:third}
+Table \ref{tab:complexmodprob} shows probit estimations of the complex model as seen in Equation \ref{eqn:genmod}. Additionally, LPM estimates are displayed for the same models. The coefficients of the probit estimation are similar in sign and significance to the ones of the logit estimation of Table \ref{tab:complexmod}. Average partial effects for these models are also shown below. These are also similar in magnitude to those in Table \ref{tab:apescomp}. 
+\clearpage
+<<complex_mod_est, include = F, cache = T>>=
+# Unemployment
+
+prob_unem_c<-svyglm(ctol~ year*(unem2_4a) + age + gndr + ed + ur + eff1 + eff2 + prot3 + pint_dic + corrper + corr_exp +
+                   polscore + pres_aprov,
+                   design = lapop_des46,
+                   family = quasibinomial(link = 'probit'))
+
+# Presidential Confidence
+
+prob_aprov_c<-svyglm(ctol~ year*(pres_aprov) + age + gndr + ed + ur + eff1 + eff2 + prot3 + pint_dic + corrper + corr_exp +
+                    unem2_4a + polscore,
+                    design = lapop_des46,
+                    family = quasibinomial(link = 'probit'))
+
+# Political Score
+
+prob_pols_c<-svyglm(ctol~ year*(polscore) + age + gndr + ed + ur + eff1 + eff2 + prot3 + pint_dic + corrper + corr_exp + 
+                   unem2_4a + pres_aprov,
+                   design = lapop_des46,
+                   family = quasibinomial(link = 'probit'))
+
+# Put them in a list
+
+complex_models_p<- list(prob_unem_c,
+                      prob_aprov_c,
+                      prob_pols_c)
+# Now the APES
+
+apes_probunc<-margins(prob_unem_c)
+apes_probaprovc<-margins(prob_aprov_c)
+apes_probpscorec<-margins(prob_pols_c)
+
+complex_apesp<-list(apes_probunc,
+                   apes_probaprovc,
+                   apes_probpscorec)
+
+# Now the LPM
+
+lpm_unem_c<-svyglm(ctol~ year*(unem2_4a) + age + gndr + ed + ur + eff1 + eff2 + prot3 + pint_dic + corrper + corr_exp +
+                   polscore + pres_aprov,
+                   design = lapop_des46)
+
+# Presidential Confidence
+
+lpm_aprov_c<-svyglm(ctol~ year*(pres_aprov) + age + gndr + ed + ur + eff1 + eff2 + prot3 + pint_dic + corrper + corr_exp +
+                    unem2_4a + polscore,
+                    design = lapop_des46)
+
+# Political Score
+
+lpm_pols_c<-svyglm(ctol~ year*(polscore) + age + gndr + ed + ur + eff1 + eff2 + prot3 + pint_dic + corrper + corr_exp + 
+                   unem2_4a + pres_aprov,
+                   design = lapop_des46)
+
+complex_lpm<-list(lpm_unem_c,
+                  lpm_aprov_c,
+                  lpm_pols_c)
+
+@
+% Parameters for tables
+<<complex_model_table_prob, include = F, warning = F>>=
+# First the observations row
+extra_obs_complexmodp<-data.frame('Observations',
+                     as.character(length(fitted(prob_unem_c))),
+                     as.character(length(fitted(prob_aprov_c))),
+                     as.character(length(fitted(prob_pols_c))))
+
+colnames(extra_obs_complexmodp)<-c('Name', '1', '2', '3')
+
+# State the model statistics that I want to use
+
+complex_models_statsp<-list(
+  list("raw" = "AIC", "clean" = "AIC", "fmt" = 2),
+  list("raw" = "BIC", "clean" = "BIC", "fmt" = 2))
+
+# State the coefficient names that I want
+
+coefficient_names_cp<-c('(Intercept)' = 'Constant',
+                     'year2016' = '2016 Dummy',
+                     'gndrWoman' = 'Woman',
+                     'age' = 'Age',
+                     'ed' = 'Years of education',
+                     'urUrban' = 'Lives in urban setting',
+                     'eff1' = 'External political efficacy',
+                     'eff2' = 'Internal political efficacy',
+                     'prot3Yes' = 'Participation in a protest',
+                     'pint_dic' = 'Interest in politics', 
+                     'corrper' = 'Perceptions of corruption',
+                     'corr_exp' = 'Exposure to corruption',
+                     'unem2_4a' = 'Unemployment',
+                     'pres_aprov' = 'Approval of Pres. Performance',
+                     'polscore' = 'Political Wing',
+                     'year2016:unem2_4a' = 'Unemployment Interaction',
+                     'year2016:pres_aprov' = 'Pres. Approval Interaction',
+                     'year2016:polscore' = 'Pol. Wing Interaction')
+@
+% Now the table
+\renewcommand{\arraystretch}{0.65}
+<<complex_table_prob, include = T, warning = F, results = 'asis', echo = F>>=
+# Now make the actual table
+opts_current$set(label = 'complexmodprob')
+modelsummary(complex_models_p,
+             stars = c('*'= 0.1, '**' = 0.05, '***'= 0.01),
+             output = 'kableExtra',
+             gof_map = complex_models_statsp,
+             coef_map = coefficient_names_cp,
+             add_rows = extra_obs_complexmodp,
+             caption = 'Probit coefficients for general models as shown in Equation 1',
+             notes = c('Data from the open-access AB databases, with design effects-adjusted standard errors.',
+                       'Coefficient table for the complete model probit estimation as shown in Equation 1.'
+                        ),
+             format = 'latex',
+             align = 'lrrr',
+             longtable = T,
+             position = 'htbp')
+@
+\clearpage
+% APE table
+\begin{table}[htbp]
+\begin{center}
+\label{tab:apecompprob1}
+\caption{Average partial effects for models in Table \ref{tab:complexmodprob}}
+<<ape_comp_prob, include = T, echo = F, warning = F, results = 'asis'>>=
+coefficient_names_apesc<-c('gndrWoman' = 'Woman',
+                       'year2016' = '2016 Dummy',
+                       'age' = 'Age',
+                       'ed' = 'Years of education',
+                       'urUrban' = 'Lives in urban setting',
+                       'eff1' = 'External political efficacy',
+                       'eff2' = 'Internal political efficacy',
+                       'prot3Yes' = 'Participation in a protest',
+                       'pint_dic' = 'Interest in politics', 
+                       'corrper' = 'Perceptions of corruption',
+                       'corr_exp' = 'Exposure to corruption',
+                       'unem2_4a' = 'Unemployment',
+                       'pres_aprov' = 'Approval of Pres. Performance',
+                       'polscore' = 'Political Wing')
+
+modelsummary(complex_apesp,
+             output = 'latex_tabular',
+             stars = c('*'= 0.1, '**' = 0.05, '***'= 0.01),
+             coef_map = coefficient_names_apesc,
+             align = 'lrrr',
+             gof_omit = 'AIC|BIC')
+@
+\end{center}
+Average partial effects for the probit estimations of the models described by Equation \ref{eqn:genmod}. Data from the open-access AB databases. Standard errors consider design effects of the AB complex survey design.\\
+*p < 0.1, **p< 0.05, ***p < 0.01.
+\end{table}
+\clearpage
+% LPM table
+<<complex_table_lpm, include = T, warning = F, results = 'asis', echo = F>>=
+opts_current$set(label = 'complexmodlpm')
+modelsummary(complex_lpm,
+             stars = c('*'= 0.1, '**' = 0.05, '***'= 0.01),
+             output = 'kableExtra',
+             gof_map = complex_models_statsp,
+             coef_map = coefficient_names_cp,
+             add_rows = extra_obs_complexmodp,
+             caption = 'LPM coefficients for general models as shown in Equation 1',
+             notes = c('Note: Data from the open-access AB databases, with design effects-adjusted standard errors.',
+                       'Coefficient table for the complete model LPM estimation as shown in Equation 1.'
+                        ),
+             format = 'latex',
+             align = 'lrrr',
+             longtable = T,
+             position = 'htbp')
+@

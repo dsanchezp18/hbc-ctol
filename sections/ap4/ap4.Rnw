@@ -1,0 +1,152 @@
+% Appendix 4: Cross section Models with Alternative Link Functions Rnw File
+<<parent_ap4, include = F>>=
+set_parent('../../main_file.Rnw') # Set the parent document preamble
+@
+
+\section{APPENDIX D: OTHER EMPIRICAL MODELS FOR TABLE \ref{tab:complexmodc}}
+
+Table \ref{tab:complexmodcprob} shows probit estimations of the cross sectional models as seen in Equation \ref{eqn:crosssecmodel}. Additionally, Table \ref{tab:complexmodlpmcross} shows the LPM estimates for the same models. The coefficients of the probit estimation are similar in sign and significance to the ones of the logit estimation. Average partial effects for these models are shown in Table \ref{tab:apecrossprobit}, also similar in magnitude to those in Table \ref{tab:apescomp}.
+\clearpage
+% Estimate the cross-section models and partial effects
+<<cross_section_models_two, include = F, cache = T>>=
+# Estimate probit models
+prob_14<-svyglm(ctol~ unem2_4a + age + gndr + ed + ur + eff1 + eff2 + prot3 + pint_dic + corrper + corr_exp + polscore +
+               pres_aprov,
+               design = lapop_des14,
+               family = quasibinomial(link = 'probit'))
+
+prob_16<-svyglm(ctol~ unem2_4a + age + gndr + ed + ur + eff1 + eff2 + prot3 + pint_dic + corrper + corr_exp + polscore +
+               pres_aprov,
+               design = lapop_des16,
+               family = quasibinomial(link = 'probit'))
+
+cross_secp<-list(prob_14,
+                prob_16)
+# Estimate the LPMs
+lpm_14<-svyglm(ctol~ unem2_4a + age + gndr + ed + ur + eff1 + eff2 + prot3 + pint_dic + corrper + corr_exp + polscore +
+               pres_aprov,
+               design = lapop_des14)
+
+lpm_16<-svyglm(ctol~ unem2_4a + age + gndr + ed + ur + eff1 + eff2 + prot3 + pint_dic + corrper + corr_exp + polscore +
+               pres_aprov,
+               design = lapop_des16)
+
+cross_sec_lpm<-list(lpm_14,
+                    lpm_16)
+
+prob14_ape<-margins(prob_14)
+
+prob16_ape<-margins(prob_16)
+
+cross_sec_apeprob<-list(prob14_ape,
+                    prob16_ape)
+@
+% Now the table
+\renewcommand{\arraystretch}{0.6}
+<<table_cross_sectionfa, include= T, warning = F, results= 'asis', echo = F, cache = T>>=
+extra_obs_cross_secp<-data.frame('Observations',
+                     as.character(length(fitted(prob_14))),
+                     as.character(length(fitted(prob_16))))
+
+colnames(extra_obs_cross_secp)<-c('Name', '1', '2')
+
+years_cross_sec_tablep<-data.frame('Year', '2014', '2016')
+
+colnames(years_cross_sec_tablep)<-c('Name', '1', '2')
+
+extra_obs_cross_secp<-bind_rows(extra_obs_cross_secp, years_cross_sec_tablep)
+
+# State the model statistics that I want to use
+
+cross_sec_models_statsp<-list(
+  list("raw" = "AIC", "clean" = "AIC", "fmt" = 2),
+  list("raw" = "BIC", "clean" = "BIC", "fmt" = 2))
+
+# State the coefficient names that I want
+
+coefficient_names_crossp<-c('(Intercept)' = 'Constant',
+                     'gndrWoman' = 'Woman',
+                     'age' = 'Age',
+                     'ed' = 'Years of education',
+                     'urUrban' = 'Lives in urban setting',
+                     'eff1' = 'External political efficacy',
+                     'eff2' = 'Internal political efficacy',
+                     'prot3Yes' = 'Participation in a protest',
+                     'pint_dic' = 'Interest in politics', 
+                     'corrper' = 'Perceptions of corruption',
+                     'corr_exp' = 'Exposure to corruption',
+                     'unem2_4a' = 'Unemployment',
+                     'pres_aprov' = 'Approval of Pres. performance',
+                     'polscore' = 'Political wing')
+@
+
+<<table_cross_section1a, include= T, warning = F, results= 'asis', echo = F, cache = F>>=
+# Now make the actual table
+opts_current$set(label = 'complexmodcprob')
+modelsummary(cross_secp,
+             stars = c('*'= 0.1, '**' = 0.05, '***'= 0.01),
+             output = 'latex',
+             gof_map = cross_sec_models_statsp,
+             coef_map = coefficient_names_crossp,
+             add_rows = extra_obs_cross_secp,
+             title = 'Probit coefficients for cross-sectional models',
+             notes = c('Note: Data from the open-access AB databases, with design effects-adjusted standard errors.',
+                       'Coefficient table for the cross-sectional model probit estimation as shown in Equation 1.'
+                        ),
+             longtable = T,
+             align = 'lrr',
+             position = 'H')
+@
+% Now the APEs table
+\begin{table}[H]
+\begin{center}
+\caption{Average partial effects for cross-sectional models in Table \ref{tab:complexmodcprob}}
+\label{tab:apecrossprobit}
+<<ape_probit_tablef, include= T, echo = F, results = 'asis', warning = F>>=
+coefficient_names_apes_cp<-c('gndrWoman' = 'Woman',
+                         'age' = 'Age',
+                       'ed' = 'Years of education',
+                       'urUrban' = 'Lives in urban setting',
+                       'eff1' = 'External political efficacy',
+                       'eff2' = 'Internal political efficacy',
+                       'prot3Yes' = 'Participation in a protest',
+                       'pint_dic' = 'Interest in politics', 
+                       'corrper' = 'Perceptions of corruption',
+                       'corr_exp' = 'Exposure to corruption',
+                       'unem2_4a' = 'Unemployment',
+                       'pres_aprov' = 'Approval of Pres. performance',
+                       'polscore' = 'Political wing')
+
+modelsummary(cross_sec_apeprob,
+             output = 'latex_tabular',
+             stars = c('*'= 0.1, '**' = 0.05, '***'= 0.01),
+             coef_map = coefficient_names_apes_cp,
+             gof_omit = 'AIC|BIC',
+             align = 'lrr',
+             add_rows = data.frame('Year', '2014', '2016'))
+
+@
+\end{center}
+Note: Average partial effects for probit cross-sectional empirical models in Table \ref{tab:complexmodc}. Data from the open-access AB. Standard errors consider design effects of the AB complex survey design. 
+*p < 0.1, **p< 0.05, ***p< 0.01.
+\end{table}
+\clearpage
+% Now the lpm table
+<<complex_table_lpm_cross2, include = T, warning = F, results = 'asis', echo = F>>=
+opts_current$set(label = 'complexmodlpmcross')
+modelsummary(cross_sec_lpm,
+             stars = c('*'= 0.1, '**' = 0.05, '***'= 0.01),
+             output = 'kableExtra',
+             gof_map = cross_sec_models_statsp,
+             coef_map = coefficient_names_crossp,
+             add_rows = extra_obs_cross_secp,
+             caption = 'LPM coefficients for cross-sectional models',
+             notes = c('Note: Data from the open-access AB databases, with design effects-adjusted standard errors.',
+                       'Coefficient table for the cross-sectional model LPM estimation'
+                        ),
+             format = 'latex',
+             align = 'lrr',
+             longtable = T,
+             position = 'H')
+@
+

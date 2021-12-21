@@ -1,0 +1,282 @@
+% Thesis: Main File
+% -------------------------------------- Preamble ------------------------------------------------------------------------
+\documentclass[floatsintext,man]{apa7} % The APA manuscript document class, allows to comply with requirements.
+% floatsintext option to place figures and tables directly where I tell them to. 
+% Setup code chunk:
+<<setup, eval = TRUE, include = FALSE>>=
+# Libraries: 
+library(knitr) # For all the knitr 
+library(survey) # For survey management
+library(tidyverse) # Ggplot and Dplyr
+library(stargazer) # For 68/
+library(modelsummary) # For other tables
+library(kableExtra) # For other tables
+library(maps) # Maps
+library(mapdata) # Maps
+library(margins) # Average partial effects
+
+# Biblatex
+system (paste ("biber", sub ("\\.Rnw$", "", current_input()))) # This is so it works with biblatex
+
+# Chunk options
+knitr::opts_chunk$set(echo = F, eval = T)
+@
+
+% Load the data 
+<<data_main, include = F>>=
+load('databases/lapop_ecu.Rdata') # The complete Ecuador dataset
+load('databases/lapop46_ecu.Rdata') # Only 2014 and 2016
+load('databases/lapop14_ecu.Rdata') # Only 2014
+load('databases/lapop16_ecu.Rdata') # Only 2016
+
+# These are the paths that must be changed to absolute paths for the standalone compilation to work.
+
+@
+
+% Mini data wrangling
+<<data_wrangle, include = F>>=
+df$corper<-ifelse(df$exc7new >2, 1, 0) # DUmmy variable equaling 1 for all who consider at least half politicians are corrupt
+df$corprob<-ifelse(df$a4 == 13, 1, 0) # Extract a dummy equaling 1 if the respondent thinks corruption is the most important problem in the country. 
+df$pres_aprov_dic<-ifelse(df$pres_aprov_dic == 'Yes', 1,0) # Dichotomize with numbers
+
+df$pres_conf_dic<-ifelse(df$pres_conf_dic == 'Yes', 1, 0) # Dichotomize with numbers
+
+df$leftist<-ifelse(df$pol_group == 'Left', 1, 0)
+
+df$rightist<-ifelse(df$pol_group == 'Right', 1, 0)
+
+df$knowspol<-ifelse(df$eff2> 4, 1, 0) # Dichotomize with the LAPOP way. 
+
+df$extpol<-ifelse(df$eff1>4,1,0) # Dichotomize external political efficacy in LAPOP way. 
+
+@
+
+% Survey design objects
+<<design, include=FALSE>>=
+# Complete survey design
+lapop_des<-svydesign(ids = ~ upm, 
+                     strata = ~ estratopri, 
+                     weights = ~ weight1500, 
+                     nest = TRUE,
+                     na.action = 'na.exclude',
+                     data = df)
+# 2014-2016 Survey Design
+lapop_des46<-svydesign(ids = ~ upm, 
+                       strata = ~ estratopri, 
+                       weights = ~ weight1500, 
+                       nest = TRUE,
+                       na.action = 'na.exclude',
+                       data = df46)
+
+# 2016 free dataset
+
+df16<-subset(df, df$year == 2016)
+
+lapop_des16<-svydesign(ids = ~ upm, 
+                       strata = ~ estratopri, 
+                       weights = ~ weight1500, 
+                       nest = TRUE,
+                       na.action = 'na.exclude',
+                       data = df16)
+
+# 2014 free dataset
+
+df14<-subset(df, df$year == 2014)
+
+lapop_des14<-svydesign(ids = ~ upm, 
+                       strata = ~ estratopri, 
+                       weights = ~ weight1500, 
+                       nest = TRUE,
+                       na.action = 'na.exclude',
+                       data = df14)
+@
+
+% Tabulate the AB data to call the exact figures on the text. These are used in many of the sub .Rnw files so they must
+% be tabulated in the main document. 
+<<tabulations, include= F>>=
+# Corruption perceptions (the new question)
+corper_time<-svyby(~ corper, 
+                   ~ year, 
+                   design = lapop_des,
+                   svymean, 
+                   na.rm = T)
+
+# Corruption as the most important problem in the country
+
+corprob_time<-svyby(~ corprob, 
+                    ~ year, 
+                    design = lapop_des,
+                    svymean, 
+                    na.rm = T)
+
+# Corruption tolerance 
+
+ctol_time<-svyby(~ ctol, 
+                 ~ year, 
+                 design = lapop_des,
+                 svymean, 
+                 na.rm = T)
+
+# Confidence in the president
+pconf_time<-svyby(~ pres_conf_dic, 
+                  ~ year, 
+                  design = lapop_des,
+                  svymean, 
+                  na.rm = T)
+# Job Approval
+
+japrov_time<-svyby(~ pres_aprov_dic, 
+                   ~ year, 
+                   design = lapop_des,
+                   svymean, 
+                   na.rm = T)
+
+# Interest in politics. 
+
+intpol_year<-svyby(~ pol_int, 
+                   ~ year, 
+                   design = lapop_des,
+                   svymean, 
+                   na.rm = T)
+
+# Unemployment (complete)
+
+unem_t<-svyby(~ unem2_4a, 
+              ~ year, 
+              design = lapop_des,
+              svymean, 
+              na.rm = T)
+
+# Econsit (complete)
+
+ecsit_t<-svyby(~ econ_sit, 
+              ~ year, 
+              design = lapop_des,
+              svymean, 
+              na.rm = T)
+
+@
+
+% I need the following "parameters" to make the document work: 
+\title{Honesty by Convenience: Corruption Tolerance in Ecuador}
+\shorttitle{}
+\author{Daniel Sánchez}
+\authorsaffiliations{Universidad San Francisco de Quito}
+\date{}
+
+% Renewing command output for it to fit with USFQ Thesis guidelines
+
+\renewcommand{\contentsname}{TABLE OF CONTENTS}
+\renewcommand{\listtablename}{INDEX OF TABLES}
+\renewcommand{\listfigurename}{INDEX OF FIGURES}
+
+% Math packages: 
+
+\usepackage{savesym} % Need to "save" the command that is already defined \varTheta
+\usepackage{amsmath}
+  \savesymbol{varTheta} 
+
+% For fonts in Times New Roman as well as equations: 
+\usepackage{mathspec}
+  \setallmainfonts(Digits,Greek,Latin){Times New Roman}
+\restoresymbol{MTP}{varTheta}
+  
+% Biblatex citation/bibliography manager: 
+
+\usepackage[backend = biber, style = apa, citestyle = apa]{biblatex}
+    \addbibresource{thesis_refs.bib} % This might need an absolute pathway if errors start to pop up. 
+
+% Spacing and indenting
+
+\setlength{\parindent}{0.5in}
+\setlength{\parskip}{0.25cm}
+
+% Justify the text
+
+\usepackage{ragged2e}
+
+% For tables
+
+\usepackage{siunitx} % For the modelsummary tables
+\usepackage{booktabs} % For the modelsummary tables
+\usepackage{longtable} % For tables larger than one page
+\newcolumntype{d}{S[input-symbols = ()]}
+\usepackage{caption}
+\usepackage{multirow}
+
+% Other packages
+
+\usepackage{csquotes} % For quotation marks
+\usepackage{epigraph} % For epigraph
+\usepackage{float} % For the H float option- only used in emergencies (lol)
+
+% Always load these packages at the end
+
+\usepackage{hyperref} % Cross referencing with hyperlinks
+
+% -------------------------------------------- Actual Document -----------------------------------------------------------
+
+\begin{document}
+\justifying
+% Sections: 
+% ---------------------------------------------- Prelim ---------------------------------------------------------------------
+<<prelim_child, child = 'sections/prelim/prelim.Rnw'>>=
+@
+\clearpage
+% ---------------------------------------------- Acknowledgements --------------------------------------------------------
+<<ack_child, child = 'sections/ack/ack.Rnw'>>=
+@
+\clearpage
+% --------------------------------------------- Abstract ---------------------------------------------------------------
+<<abs_child, child = 'sections/abstract/abstract.Rnw'>>=
+@
+\clearpage
+% ----------------------------------------- Contents -----------------------------------------------------------
+\tableofcontents % Table of contents
+\clearpage 
+\listoftables % List of tables
+\clearpage
+\listoffigures % List of figures
+\clearpage
+% ---------------------------------------------- Introduction -----------------------------------------------------------
+<<intro_child, child = 'sections/intro/intro.Rnw'>>=
+@
+\clearpage
+% ----------------------------------------------- Literature Review -----------------------------------------------------
+<<litrev_child, child = 'sections/litrev/litrev.Rnw'>>=
+@
+\clearpage
+% ----------------------------------------------------- Empirical Approach ----------------------------------------------
+<<empap_child, child = 'sections/empap/empap.Rnw'>>=
+@
+\clearpage
+% ----------------------------------------------------- Findings ---------------------------------------------------------
+<<findings_child, child = 'sections/findings/findings.Rnw'>>=
+@
+\clearpage
+<<conclusions_child, child = 'sections/conclusions/conclusions.Rnw'>>=
+@
+\clearpage
+% ---------------------------------------------------- Appendices---------------------------------------------------------
+% Appendix A: Variable Explanations
+<<ap1_child, child = 'sections/ap1/ap1.Rnw'>>=
+@
+\clearpage
+% Appendix B: Simple Models with alternative link functions
+<<ap2_child, child = 'sections/ap2/ap2.Rnw'>>=
+@
+\clearpage
+% Appendix C: Complex Models with alternative link functions
+<<ap3_child, child = 'sections/ap3/ap3.Rnw'>>=
+@
+\clearpage
+% Appendix D: Complex Models (cross-section with alternative link functions)
+<<ap4_child, child = 'sections/ap4/ap4.Rnw'>>=
+@
+\clearpage
+% ------------------------------------------------------ Bibliography --------------------------------------------------
+\section{REFERENCES}
+\printbibliography[heading = none]
+\clearpage
+\end{document} 
+

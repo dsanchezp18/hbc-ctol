@@ -1,0 +1,12 @@
+% Abstract Rnw File
+<<parent_toabs, include = F>>=
+set_parent('../../main_file.Rnw') # Set the parent document preamble
+@
+\section*{ABSTRACT}
+
+The causes and consequences of corruption have been well studied in the literature. However, the way that citizens behave toward corruption has mostly escaped attention by academics, even when considering that attitudes may be a strong determinant of the incidence of corruption. In this paper a large rise of corruption tolerance in Ecuador between 2014 and 2016 is studied. Using survey data from the AmericasBarometer, binary-outcome empirical models are estimated to discover the key determinants of the jump. The study finds that the corruption tolerance increase could have been driven by a change in attitudes by supporters of the President as well as by individuals identifying closer to the political right. People who approved of the President's job performance initially justified bribes less than those who did not approve. However, by 2016 supporters started to justify corruption to a greater extent. People that identified closer to the political right wing started to justify corruption more in 2016 relative to 2014. The jump is explained through these variables as the percentage of people who approved of the President decreased and the percentage of people identifying with the political right increased. It is also found that the people who were either employed or outside the labor force justified bribes more in 2016 when compared to those who were unemployed. Additionally, findings by the literature are confirmed with this across-time approach: people who are younger and who are exposed to corruption are more likely to justify corruption. It is hypothesized that the economic recession faced by the country combined with accusations of corruption to government officials may have led the jump through the mentioned political opinion variables. Mechanisms of normalization of corruption are discussed with basis on the theories proposed by \textcite{Ashforth.2003}, \textcite{Hurtado.2007} and \textcite{Adoum.2000}. 
+
+\noindent \textbf{Keywords:} Corruption tolerance, Ecuador, Latin America, Logit models, Unemployment, Job approval rating, Political identification, Interaction terms, Social payoffs, AmericasBarometer. 
+
+\clearpage
+

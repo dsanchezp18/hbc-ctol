@@ -1,0 +1,192 @@
+% Appendix 2: Simple Models with Alternative Link Functions Rnw File
+<<parent_ap2, include = F>>=
+set_parent('../../main_file.Rnw') # Set the parent document preamble
+@
+\section{APPENDIX B: OTHER EMPIRICAL MODELS FOR TABLE \ref{tab:simplemodel}}
+\label{app:second}
+Table \ref{tab:probitsimp} shows a probit estimation of the model displayed in Equation \ref{eqn:simplemod}. The signs of the coefficients in this table confirm the findings of the logit model as explained in Table \ref{subsec:fin2}. Table \ref{tab:probitsimpape} shows average partial effects for the probit models in Table \ref{tab:probitsimp}. The magnitudes of these effects are similar to those shown in Table \ref{tab:simplemodel}. Table \ref{tab:lpmsimp} shows the estimated effects of a linear probability model of Equation \ref{eqn:simplemod}, which also follow the coefficient signs in the logit and probit estimates. 
+% Estimate the models
+<<alt_simp_mod, include = F>>=
+# Probit models
+# Economic Situation
+prob_ecsit<-svyglm(ctol ~ year*econ_sit,
+                  design = lapop_des46,
+                  family = quasibinomial(link = 'probit'))
+
+# Unemployment
+prob_unem<-svyglm(ctol ~ year*unem2_4a,
+                 design = lapop_des46,
+                 family = quasibinomial(link = 'probit'))
+
+# Confidence in the President
+
+prob_pconf<-svyglm(ctol ~ year*pres_conf,
+                  design = lapop_des46,
+                  family = quasibinomial(link = 'probit'))
+
+# President's Job Approval
+
+prob_aprov<-svyglm(ctol ~ year*pres_aprov,
+                  design = lapop_des46,
+                  family = quasibinomial(link = 'probit'))
+
+# Political wings
+
+prob_polscore<-svyglm(ctol ~ year*polscore,
+                     design = lapop_des46,
+                     family = quasibinomial(link = 'probit'))
+
+# Put all of them in a list
+
+simple_models_prob<-list(prob_ecsit, prob_unem, prob_pconf, prob_aprov, prob_polscore)
+
+@
+% Present the table
+\begin{table}[htbp]
+\renewcommand{\arraystretch}{0.6}
+\begin{center}
+\caption{Probit models for Equation \ref{eqn:simplemod}}
+\label{tab:probitsimp}
+<<table_alt_models, include = T, warning=FALSE, results = 'asis', echo = F, cache = T>>=
+
+extra_obs_simplemodels_prob<-data.frame('Observations',
+                                        as.character(length(fitted(prob_ecsit))),
+                                        as.character(length(fitted(prob_unem))),
+                                        as.character(length(fitted(prob_pconf))),
+                                        as.character(length(fitted(prob_aprov))),
+                                        as.character(length(fitted(prob_polscore))))
+
+colnames(extra_obs_simplemodels_prob)<-c('Name', '1', '2', '3', '4', '5')
+
+# State the model statistics that I want to use
+
+simple_models_stats_prob<-list(
+  list("raw" = "AIC", "clean" = "AIC", "fmt" = 2),
+  list("raw" = "BIC", "clean" = "BIC", "fmt" = 2))
+
+# State the coefficient names that I want
+
+coefficient_names_prob<-c('(Intercept)' = 'Constant',
+                          'year2016' = '2016 Dummy',
+                          'econ_sitWorse' = 'Worse Economic Situation',
+                          'unem2_4a' = 'Unemployment',
+                          'pres_conf' = 'Confidence in President',
+                          'pres_aprov' = 'Approval of Pres. Performance',
+                          'polscore' = 'Political Wing',
+                          'year2016:econ_sitWorse' = 'Econ. Situation Interaction',
+                          'year2016:unem2_4a' = 'Unemployment Interaction',
+                          'year2016:pres_conf' = 'Pres. Confidence Interaction',
+                          'year2016:pres_aprov' = 'Pres. Approval Interaction',
+                          'year2016:polscore' = 'Pol. Wing Interaction')
+
+# Now make the actual table
+
+modelsummary(simple_models_prob,
+             stars = c('*'= 0.1, '**' = 0.05, '***'= 0.01),
+             output = 'latex_tabular',
+             gof_map = simple_models_stats_prob,
+             coef_map = coefficient_names_prob,
+             add_rows = extra_obs_simplemodels_prob)
+@
+\end{center}
+Coefficients of the probit estimation of the simple interaction models as described by Equation \ref{eqn:simplemod}. Standard errors consider design effects of the AB complex survey design. \\ 
+*p < 0.1, **p< 0.05, ***p < 0.01.
+\end{table}
+% Estimate APEs for the probit models
+<<apes_prob, include = F, cache = T>>=
+apes_probec<-margins(prob_ecsit)
+apes_probun<-margins(prob_unem)
+apes_probpconf<-margins(prob_pconf)
+apes_probaprov<-margins(prob_aprov)
+apes_probpscore<-margins(prob_polscore)
+
+simple_apes_prob<-list(apes_probec,
+                       apes_probun,
+                       apes_probpconf,
+                       apes_probaprov,
+                       apes_probpscore)
+@
+% Present the APES
+\begin{table}[htbp]
+\renewcommand{\arraystretch}{0.6}
+\begin{center}
+\caption{Average partial effects for probit models in Table \ref{tab:probitsimp}}
+\label{tab:probitsimpape}
+<<simple_apes_table_prob, include = T, warning=FALSE, results = 'asis', echo = F, cache = T>>=
+coefficient_names_ape_prob<-c('year2016' = '2016 Dummy',
+                              'econ_sitWorse' = 'Worse Economic Situation',
+                              'unem2_4a' = 'Unemployment',
+                              'pres_conf' = 'Confidence in President',
+                              'pres_aprov' = 'Approval of Pres. Performance',
+                              'polscore' = 'Political Wing')
+
+modelsummary(simple_apes_prob,
+             output = 'latex_tabular',
+             stars = c('*'= 0.1, '**' = 0.05, '***'= 0.01),
+             coef_map = coefficient_names_ape_prob,
+             gof_omit = 'AIC|BIC')
+@
+\end{center}
+Note: Average partial effects for the probit estimations of the models described by Equation \ref{eqn:simplemod}. Data from the open-access AB databases. Standard errors consider design effects of the AB complex survey design.\\
+*p < 0.1, **p< 0.05, ***p < 0.01.
+\end{table}
+% Now estimate LPMs
+<<lpms, include = F >>=
+lpm_ecsit<-svyglm(ctol ~ year*econ_sit,
+                  design = lapop_des46)
+
+# Unemployment
+lpm_unem<-svyglm(ctol ~ year*unem2_4a,
+                 design = lapop_des46)
+
+# Confidence in the President
+
+lpm_pconf<-svyglm(ctol ~ year*pres_conf,
+                  design = lapop_des46)
+
+# President's Job Approval
+
+lpm_aprov<-svyglm(ctol ~ year*pres_aprov,
+                  design = lapop_des46)
+
+# Political wings
+
+lpm_polscore<-svyglm(ctol ~ year*polscore,
+                     design = lapop_des46)
+
+# Put all of them in a list
+
+simple_models_lpm<-list(lpm_ecsit, lpm_unem, lpm_pconf, lpm_aprov, lpm_polscore)
+
+@
+% Now the table
+\begin{table}[htbp]
+\renewcommand{\arraystretch}{0.6}
+\begin{center}
+\caption{Linear Probability Models for Equation \ref{eqn:simplemod}}
+\label{tab:lpmsimp}
+<<simple_apes_table_lpm, include = T, warning=FALSE, results = 'asis', echo = F, cache = T>>=
+
+extra_obs_simplemodels_lpm<-data.frame('Observations',
+                                        as.character(length(fitted(lpm_ecsit))),
+                                        as.character(length(fitted(lpm_unem))),
+                                        as.character(length(fitted(lpm_pconf))),
+                                        as.character(length(fitted(lpm_aprov))),
+                                        as.character(length(fitted(lpm_polscore))))
+
+colnames(extra_obs_simplemodels_lpm)<-c('Name', '1', '2', '3', '4', '5')
+
+modelsummary(simple_models_lpm,
+             output = 'latex_tabular',
+             stars = c('*'= 0.1, '**' = 0.05, '***'= 0.01),
+             coef_map = coefficient_names_prob,
+             add_rows = extra_obs_simplemodels_lpm)
+@
+\end{center}
+Coefficients of the LPM estimation of the simple interaction models as described by Equation \ref{eqn:simplemod}. Standard errors consider design effects of the AB complex survey design. \\ 
+*p < 0.1, **p< 0.05, ***p < 0.01.
+\end{table}
+
+
+
+

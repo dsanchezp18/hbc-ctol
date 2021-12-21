@@ -1,0 +1,35 @@
+% Preliminaries Rnw File
+<<parent_toprel, include = F>>=
+set_parent('../../main_file.Rnw') # Set the parent document preamble
+@
+
+% Titlepage 1
+\begin{titlepage}
+\centering
+{\Large \textbf{UNIVERSIDAD SAN FRANCISCO DE QUITO}}
+
+\vspace{1cm} 
+{\large \textbf{School of Economics}}
+
+\vspace{2.5cm}
+{\Large \textbf{Honesty by Convenience: Corruption Tolerance in Ecuador}}
+
+\vspace{2cm}
+{\Large \textbf{Daniel Hernán Sánchez Pazmiño} \\ \textbf{Economics}}
+
+\vspace{1.5cm}
+{\large Capstone project presented for the procurement of the degree of \\ \textbf{Economics, B.A.}}
+
+\vspace{1.5cm}
+{\large Supervisor: Santiago José Gangotena Ruiz, Ph.D.}
+
+\vspace{2.5cm}
+Quito, December 13th, 2021.
+\end{titlepage}
+\clearpage
+
+\begin{center}
+{\Large \textbf{UNPUBLISHED DOCUMENT}}
+\end{center}
+\noindent \textbf{Note:} The following capstone project is available through Universidad San Francisco de Quito USFQ institutional repository. Nonetheless, this project – in whole or in part – should not be considered a publication. This statement follows the recommendations presented by the Committee on Publication Ethics COPE described by Barbour et al. (2017) Discussion document on best practice for issues around theses publishing available on \href{http://bit.ly/COPETheses}{http://bit.ly/COPETheses}.
+
