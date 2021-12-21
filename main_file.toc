@@ -1,0 +1,31 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{INTRODUCTION}{11}{section*.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{LITERATURE REVIEW}{16}{section*.9}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{METHODOLOGY}{22}{section*.10}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{Data}{23}{section*.12}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{Empirical Models}{23}{section*.13}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{Incorporating design effects}{25}{section*.14}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{RESULTS}{26}{section*.15}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{Key regressors for the corruption tolerance jump}{27}{section*.18}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{Ceteris paribus effects of unemployment, presidential approval and political identification on corruption tolerance}{34}{section*.22}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{CONCLUSIONS}{49}{section*.27}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{APPENDIX A: DETAILS ABOUT THE QUESTIONS AND VARIABLE ENCODINGS}{57}{section*.28}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{APPENDIX B: OTHER EMPIRICAL MODELS FOR TABLE \ref {tab:simplemodel}}{62}{section*.29}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{APPENDIX C: OTHER EMPIRICAL MODELS FOR TABLE \ref {tab:complexmod}}{65}{section*.33}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{APPENDIX D: OTHER EMPIRICAL MODELS FOR TABLE \ref {tab:complexmodc}}{71}{section*.35}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{REFERENCES}{75}{section*.37}%
