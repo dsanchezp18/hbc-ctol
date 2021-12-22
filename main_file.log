@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/W32TeX) (preloaded format=xelatex 2021.8.18)  20 DEC 2021 23:35
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/W32TeX) (preloaded format=xelatex 2021.8.18)  22 DEC 2021 00:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1517,28 +1517,24 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [20]
 [21]
-Overfull \hbox (28.38765pt too wide) in paragraph at lines 333--360
+Overfull \hbox (28.38765pt too wide) in paragraph at lines 334--361
 [][]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 333--360
+Underfull \hbox (badness 10000) in paragraph at lines 334--361
 
  []
 
 [22
 
-]
-
-LaTeX Warning: Reference `tab:descrip' on page 23 undefined on input line 365.
-
-[23
+] [23
 
 ] [24] [25]
 File: figure/econ_graph-1.pdf Graphic file (type pdf)
 <use figure/econ_graph-1.pdf>
 
-Overfull \hbox (9.79999pt too wide) in paragraph at lines 436--437
+Overfull \hbox (9.79999pt too wide) in paragraph at lines 437--438
  [][] 
  []
 
@@ -1551,12 +1547,12 @@ Underfull \vbox (badness 2781) has occurred while \output is active []
 File: figure/political_graph-1.pdf Graphic file (type pdf)
 <use figure/political_graph-1.pdf>
 
-Overfull \hbox (12.79999pt too wide) in paragraph at lines 457--458
+Overfull \hbox (12.79999pt too wide) in paragraph at lines 458--459
  [][] 
  []
 
 
-Overfull \hbox (25.5163pt too wide) in paragraph at lines 480--514
+Overfull \hbox (25.5163pt too wide) in paragraph at lines 481--515
  [] 
  []
 
@@ -1567,13 +1563,13 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 File: figure/unnamed-chunk-1-1.pdf Graphic file (type pdf)
 <use figure/unnamed-chunk-1-1.pdf>
 
-Overfull \hbox (12.79999pt too wide) in paragraph at lines 579--580
+Overfull \hbox (12.79999pt too wide) in paragraph at lines 580--581
 [][] 
  []
 
 [32] [33]
 
-LaTeX Warning: Hyper reference `app:sec' on page 34 undefined on input line 584
+LaTeX Warning: Hyper reference `app:sec' on page 34 undefined on input line 585
 .
 
 [34]
@@ -1587,7 +1583,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 File: figure/intpol_g-1.pdf Graphic file (type pdf)
 <use figure/intpol_g-1.pdf>
 
-Overfull \hbox (12.79999pt too wide) in paragraph at lines 722--723
+Overfull \hbox (12.79999pt too wide) in paragraph at lines 723--724
 [][] 
  []
 
@@ -1599,12 +1595,12 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 File: figure/corrper_g-1.pdf Graphic file (type pdf)
 <use figure/corrper_g-1.pdf>
 
-Overfull \hbox (12.79999pt too wide) in paragraph at lines 744--745
+Overfull \hbox (12.79999pt too wide) in paragraph at lines 745--746
 [][] 
  []
 
 [40]
-Overfull \hbox (10.73117pt too wide) in paragraph at lines 748--749
+Overfull \hbox (10.73117pt too wide) in paragraph at lines 749--750
 []\TU/TimesNewRoman(0)/m/n/12 Additionally, as explained by historic accounts o
 f Ecuadorian customs and behavior, protesters
  []
@@ -1646,27 +1642,19 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [55]
-[56]
+[56] [57
 
-LaTeX Warning: Reference `tab:descrip' on page 57 undefined on input line 920.
+] [58] [59] [60] [61]
 
-[57
-
-]
-
-LaTeX Warning: Reference `tab:descrip' on page 58 undefined on input line 941.
-
-[58] [59] [60] [61]
-
-Package hyperref Warning: Suppressing empty link on input line 1004.
+Package hyperref Warning: Suppressing empty link on input line 1005.
 
 
-Overfull \hbox (25.5163pt too wide) in paragraph at lines 1014--1048
+Overfull \hbox (25.5163pt too wide) in paragraph at lines 1015--1049
  [] 
  []
 
 
-Overfull \hbox (6.84958pt too wide) in paragraph at lines 1096--1130
+Overfull \hbox (6.84958pt too wide) in paragraph at lines 1097--1131
  [] 
  []
 
@@ -1691,13 +1679,13 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 [73] [74
 
 ]
-Overfull \hbox (3.63916pt too wide) in paragraph at lines 1468--1468
+Overfull \hbox (3.63916pt too wide) in paragraph at lines 1469--1469
 [][]\TU/TimesNewRoman(0)/m/n/12 Ariely, D., & Garcia-Rada, X. (2019). Contagiou
 s Dishonesty: Dishonesty begets dishonesty, rapidly
  []
 
 
-Overfull \hbox (3.31119pt too wide) in paragraph at lines 1468--1468
+Overfull \hbox (3.31119pt too wide) in paragraph at lines 1469--1469
 [][]\TU/TimesNewRoman(0)/m/n/12 Bergh, A., Fink, G., & Öhrvall, R. (2017). More
  politicians, more corruption: evidence from Swedish
  []
@@ -1705,7 +1693,7 @@ Overfull \hbox (3.31119pt too wide) in paragraph at lines 1468--1468
 [75
 
 ]
-Overfull \hbox (0.1496pt too wide) in paragraph at lines 1468--1468
+Overfull \hbox (0.1496pt too wide) in paragraph at lines 1469--1469
 [][]\TU/TimesNewRoman(0)/m/n/12 LAPOP. (2019). Ecuador 2018/19 Codebook V1.0. [
 ]$[][][][] [] [] [] [][][][][][][][] [] [][][][][][][][][][][][][][][][][] [] [
 ][][] [] [][][][][][][][] []
@@ -1725,7 +1713,7 @@ Package logreq Info: Writing requests to 'main_file.run.xml'.
 Here is how much of TeX's memory you used:
  37711 strings out of 476476
  787307 string characters out of 5817845
- 1643138 words of memory out of 5000000
+ 1643233 words of memory out of 5000000
  57527 multiletter control sequences out of 15000+600000
  457697 words of font info for 109 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
