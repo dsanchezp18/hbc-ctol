@@ -22,10 +22,9 @@ You can find another repository, [hbc-prelim](https://github.com/dsanchezp18/hbc
 
 These are the only things you'll need to do, to my own knowledge, to easily compile the paper into your own computer. Please, please let me know if you run into any issues, I'll do my best trying to help you: dsanchezp998@gmail.com. I am also open to suggestions, criticisms, comments and anything else you might need.
 
-A spanish version of the document and another repository with the data wrangling will be made available soon. 
+A spanish version of the document will be made available soon. 
 
-This repository and all those that are created in relation to it, are a tribute to my late grandfather, Jorge Enrique Pazmiño Enríquez. In his desire to see his grandsons foster a freer, fairer, and worthier society, I have tried to contribute by posting my research for the world to use. I hope it is put to good use. 
-
+This repository and all those that are created in relation to it, are a tribute to my late grandfather, Jorge Enrique Pazmiño Rodríguez. In his desire to see his grandsons foster a freer, fairer, and worthier society, I have tried to contribute by posting my research for the world to use. I hope it makes a difference
 Thank you for reading, and happy analysis!
 
 Regards,
