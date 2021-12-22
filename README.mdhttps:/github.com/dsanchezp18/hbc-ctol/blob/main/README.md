@@ -20,7 +20,7 @@ However, there are some things that need to be considered before doing so:
 
 You can find another repository, [hbc-prelim](https://github.com/dsanchezp18/hbc-prelim), where I included more R code which I used to wrangle and analyze the data and be able to manipulate and create the dataframes that I load on this project. The `df` and `df46` dataframes that I load in this repository are created from scratch there. If you'd like to replicate my results using the freely available LAPOP Americas Barometer as seen [here](https://www.vanderbilt.edu/lapop/free-access.php), do take a look at that repository. 
 
-These are the only things you'll need to do, to my own knowledge, to easily compile the paper into your own computer. Please, please let me know if you run into any issues, I'll do my best trying to help you: dsanchezp998@gmail.com. I am also open to suggestions, criticisms, comments and anything else. 
+These are the only things you'll need to do, to my own knowledge, to easily compile the paper into your own computer. Please, please let me know if you run into any issues, I'll do my best trying to help you: dsanchezp998@gmail.com. I am also open to suggestions, criticisms, comments and anything else you might need.
 
 A spanish version of the document and another repository with the data wrangling will be made available soon. 
 
