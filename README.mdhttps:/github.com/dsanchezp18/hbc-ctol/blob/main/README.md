@@ -2,7 +2,7 @@
 
 This is the source code (R) for my Bachelor's thesis for the degree of Economics, BA in Universidad San Francisco de Quito (Ecuador). Between 2014-2016, corruption tolerance greatly increased in Ecuador. Why? 
 
-In honor of the late Jorge Pazmiño (1941-2021).
+In memory of the late Jorge Pazmiño (1941-2021).
 
 I've taken great care in trying to ensure maximum reproducibility of my research "paper". Thus, one of the things I have done is upload all the code required to compile a revised version of the document. This version includes minor revisions in format for a better reading experience and some eliminated elements due to copyright reasons. More info about this can be found in the paper itself.
 
