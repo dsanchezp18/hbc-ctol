@@ -97,6 +97,7 @@ write.table(cexp_t, file = 'tables/descriptive_table_data.csv', col.names = T, s
 \begin{table}[H]
 \renewcommand{\arraystretch}{0.9}
 \caption{Descriptive statistics for all variables used in the empirical models}
+\label{tab:descrip}
 \begin{tabular}{llcccc}
 \toprule
 \multicolumn{1}{c}{\multirow{2}{*}{Variable}} & \multirow{2}{*}{\begin{tabular}[c]{@{}l@{}}Question as \\ asked in the AB\end{tabular}} & \multicolumn{2}{c}{2014}  & \multicolumn{2}{c}{2016}  \\ 
