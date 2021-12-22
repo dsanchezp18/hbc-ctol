@@ -24,7 +24,7 @@ These are the only things you'll need to do, to my own knowledge, to easily comp
 
 A spanish version of the document will be made available soon. 
 
-This repository and all those that are created in relation to it, are a tribute to my late grandfather, Jorge Enrique Pazmiño Enríquez. In his desire to see his grandsons foster a freer, fairer, and worthier society, I have tried to contribute by posting my research for the world to use. I hope it is put to good use. 
+This repository and all those that are created in relation to it, are a tribute to my late grandfather, Jorge Enrique Pazmiño Rodríguez. In his desire to see his grandsons foster a freer, fairer, and worthier society, I have tried to contribute by posting my research for the world to use. I hope it is put to good use. 
 
 Thank you for reading, and happy analysis!
 
